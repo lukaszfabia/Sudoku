@@ -1,0 +1,74 @@
+body{
+    font-family: "Roboto", sans-serif;
+    width: 50%;
+    height: auto;
+    margin: 0 auto;
+}
+
+
+.sudoku-container {
+    width: auto;
+    height: auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.sudoku-title {
+    font-size: 25px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.sudoku-title:before{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #42579b;
+    transition: width 0.3s ease;
+}
+
+.sudoku-title:hover::before {
+    width: 100%;
+}
+
+.header-button {
+    font-size: 18px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    margin-left: 115px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+
+.header-button::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #42579b;
+    transition: width 0.3s ease;
+}
+
+.header-button:hover::before {
+    width: 100%;
+}
+.link {
+    text-decoration: none;
+    color: black;
+}
+
+.link-title{
+    text-decoration: none;
+    color: #21213f;
+
+}

@@ -1,0 +1,68 @@
+section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 50px;
+    font-size: 18px;
+    color: black;
+}
+
+.difficulty {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+}
+
+.diff-lvl {
+    font-size: 18px;
+    transition: border-color 0.3s ease;
+    border: 1px solid #1a1a1a;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.diff-lvl:hover {
+    border-color: #ff8c00;
+}
+
+.diff-lvl:focus {
+    outline: none;
+    border-color: #ff8c00;
+    box-shadow: 0 0 3px rgba(255, 140, 0, 0.5);
+}
+
+.sudoku-board {
+    display: inline-block;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border: 2px solid #000;
+    overflow: hidden;
+}
+
+.sudoku-board tr:not(:last-child):nth-child(3n) td {
+    border-bottom: 3px solid #000;
+}
+
+.sudoku-board td:not(:last-child):nth-child(3n) {
+    border-right: 3px solid #000;
+}
+
+.sudoku-board td {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 18px;
+    border: 1px solid #484646;
+    background-color: #fff;
+}
+
+.sudoku-board .empty {
+    background-color: #f7f7f7;
+}
+
+.sudoku-board td:hover {
+    background-color: #e2e2e2;
+}
+

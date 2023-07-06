@@ -42,7 +42,6 @@ function shuffleArray(array) {
 }
 
 
-
 function check_board(board, row, col, number) {
     // Sprawdzenie wiersza
     for (let i = 0; i < board.length; i++) {
@@ -73,17 +72,56 @@ function check_board(board, row, col, number) {
     return true;
 }
 
-function create_board(){
-    let arr = Array.from({ length: 9 }, () => Array(9).fill(0));
-    generate_board(arr);
-    for (let i = 0; i < arr.length; i++) {
-        let row = [];
-        for (let j = 0; j < arr[i].length; j++) {
-            row.push(arr[i][j]);
+function create_board() {
+    let board = Array.from({ length: 9 }, () => Array(9).fill(0));
+    generate_board(board);
+
+    for (let i = 0; i < board.length; i++) {
+        let row = '';
+        for (let j = 0; j < board[i].length; j++) {
+            row += board[i][j] + ' ';
         }
-        console.log(row.join(" "));
+        console.log(row.trim());
     }
+
+    return board;
+}
+
+function renderBoard(board) {
+    let boardHtml = '<table class="sudoku-board">';
+
+    for (let i = 0; i < 9; i++) {
+        boardHtml += '<tr>';
+
+        for (let j = 0; j < 9; j++) {
+            const cellValue = board[i][j];
+
+            if (cellValue === 0) {
+                boardHtml += '<td class="sudoku-cell"></td>';
+            } else {
+                boardHtml += `<td class="sudoku-cell">${cellValue}</td>`;
+            }
+        }
+
+        boardHtml += '</tr>';
+    }
+
+    boardHtml += '</table>';
+
+    return boardHtml;
 }
 
 
-create_board();
+
+function sudoku_board() {
+    const selectElement = document.querySelector('.diff-lvl');
+    const selectedDifficulty = selectElement.value;
+
+    // Logika generowania planszy na podstawie wybranej trudności
+    const board = create_board();
+
+    // Wyświetlenie planszy wewnątrz kontenera
+    const boardContainer = document.getElementById('board-container');
+
+    boardContainer.innerHTML = renderBoard(board);
+}
