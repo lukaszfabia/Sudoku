@@ -1,4 +1,4 @@
-section {
+.section {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -7,6 +7,7 @@ section {
     margin-bottom: 50px;
     font-size: 18px;
     color: black;
+    overflow-x: auto; /* Dodajemy obszar przewijania w poziomie */
 }
 
 .difficulty {
@@ -39,6 +40,7 @@ section {
     margin-top: 20px;
     border: 2px solid #000;
     overflow: hidden;
+    white-space: nowrap; /* Zapobiega łamaniu planszy sudoku w pionie */
 }
 
 .sudoku-board tr:not(:last-child):nth-child(3n) td {
@@ -53,7 +55,8 @@ section {
     width: 40px;
     height: 40px;
     text-align: center;
-    font-size: 18px;
+    font-size: 25px;
+    color: #16162a;
     border: 1px solid #484646;
     background-color: #fff;
 }
@@ -63,6 +66,12 @@ section {
 }
 
 .sudoku-board td:hover {
-    background-color: #e2e2e2;
+    background-color: #a9d2da;
+    transition: background-color 0.3s ease;
 }
 
+.timer-container{
+    display: inline-block;
+    margin-left: 245px;
+    font-size: 18px;
+}

@@ -1,4 +1,4 @@
-function generate_board(arr) {
+function generateBoard(arr) {
     // tworznie tablicy z liczbami od 1 do 9
     let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -12,9 +12,9 @@ function generate_board(arr) {
                     //tasowanie liczb
                     let number = shuffledNumbers[k];
                     //sprawdzanie czy liczba pasuje do tablicy
-                    if (check_board(arr, i, j, number)) {
+                    if (checkBoard(arr, i, j, number)) {
                         arr[i][j] = number;
-                        if (generate_board(arr)) {
+                        if (generateBoard(arr)) {
                             return true;
                         } else {
                             arr[i][j] = 0;
@@ -42,7 +42,7 @@ function shuffleArray(array) {
 }
 
 
-function check_board(board, row, col, number) {
+function checkBoard(board, row, col, number) {
     // Sprawdzenie wiersza
     for (let i = 0; i < board.length; i++) {
         if (board[row][i] === number) {
@@ -72,9 +72,9 @@ function check_board(board, row, col, number) {
     return true;
 }
 
-function create_board() {
+function createBoard() {
     let board = Array.from({ length: 9 }, () => Array(9).fill(0));
-    generate_board(board);
+    generateBoard(board);
 
     for (let i = 0; i < board.length; i++) {
         let row = '';
@@ -111,17 +111,131 @@ function renderBoard(board) {
     return boardHtml;
 }
 
+let timerInterval;
+let minutes = 0;
+let seconds = 0;
+
+function startTimer() {
+    // Zerowanie minut i sekund
+    minutes = 0;
+    seconds = 0;
+
+    // Aktualizowanie timera co sekundę
+    timerInterval = setInterval(updateTimer, 1000);
+}
+
+function stopTimer() {
+    // Zatrzymanie aktualizacji timera
+    clearInterval(timerInterval);
+}
+
+function updateTimer() {
+    // Inkrementacja sekund
+    seconds++;
+
+    // Inkrementacja minut, gdy osiągnięto 60 sekund
+    if (seconds === 60) {
+        seconds = 0;
+        minutes++;
+    }
+
+    // Aktualizacja wyświetlanego czasu w elemencie z id "timer"
+    document.getElementById("timer").innerHTML = formatTime(minutes, seconds);
+}
+
+function formatTime(minutes, seconds) {
+    // Formatowanie czasu w formacie mm:ss
+    let formattedMinutes = String(minutes).padStart(2, "0");
+    let formattedSeconds = String(seconds).padStart(2, "0");
+    return `${formattedMinutes}:${formattedSeconds}`;
+}
 
 
-function sudoku_board() {
+function createMediumBoard() {
+    let board = createBoard();
+    for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board[i].length; j++) {
+            if (Math.random()<0.6) {
+                board[i][j] = 0;
+            }
+        }
+    }
+    return board;
+}
+
+function createHardBoard() {
+    let board = createBoard();
+    for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board[i].length; j++) {
+            if (Math.random()<0.7) {
+                board[i][j] = 0;
+            }
+        }
+    }
+    return board;
+}
+
+function createEasyBoard() {
+    let board = createBoard();
+    for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board[i].length; j++) {
+            if (Math.random()<0.5) {
+                board[i][j] = 0;
+            }
+        }
+    }
+    return board;
+}
+
+function createEmptyBoard() {
+    let board = createBoard();
+    for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board[i].length; j++) {
+            if (Math.random()<1.0) {
+                board[i][j] = 0;
+            }
+        }
+    }
+    return board;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const boardContainer = document.getElementById('board-container');
+    boardContainer.innerHTML = renderBoard(createEmptyBoard());
+});
+
+function sudokuBoard() {
+    const boardContainer = document.getElementById('board-container');
     const selectElement = document.querySelector('.diff-lvl');
     const selectedDifficulty = selectElement.value;
 
     // Logika generowania planszy na podstawie wybranej trudności
-    const board = create_board();
+    let board;
+    if (selectedDifficulty === 'easy') {
+        // Generowanie łatwej planszy
+        board = createEasyBoard();
+    }
+    if (selectedDifficulty === 'medium') {
+        // Generowanie średniej planszy
+        board = createMediumBoard();
+    }
+    if (selectedDifficulty === 'hard') {
+        // Generowanie trudnej planszy
+        board = createHardBoard();
+    }
 
-    // Wyświetlenie planszy wewnątrz kontenera
-    const boardContainer = document.getElementById('board-container');
-
+    // Ustawienie planszy w kontenerze
     boardContainer.innerHTML = renderBoard(board);
+
+    if (board) {
+        // Plansza została wygenerowana
+        startTimer();
+        updateTimer();
+        selectElement.disabled = true; // Zablokowanie comboboxa
+    } else {
+        // Plansza nie została wygenerowana
+        stopTimer();
+        selectElement.disabled = false; // Odblokowanie comboboxa
+    }
 }
+
