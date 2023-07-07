@@ -1,9 +1,9 @@
 # Sudoku
 ### Webowa gra logiczna. ###
 ****
-**Podstawowe informacje:**
+**Zawartość gry:**
 
-* gra zawiera trzy poziomy trudności
+* trzy poziomy trudności
 
 * skrypt z tutorialem
 
@@ -12,7 +12,7 @@
 ****
 **Rozgrywka:**
 
-Gracz wybiera poziom trudności, następnie generuje sie plansza i po prawej stronie po zaznaczeniu pola na planszy wybiera liczbe, którą chce wstawić. 
+Gracz wybiera poziom trudności, następnie generuje się plansza, po prawej stronie po zaznaczeniu pola na planszy wybiera liczbe, którą chce wstawić. 
 
 
 ****
