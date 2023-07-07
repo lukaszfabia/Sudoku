@@ -20,6 +20,6 @@ Gracz wybiera poziom trudności, następnie generuje sie plansza i po prawej str
 
 * `timer` - odmierza czasu ukończenia poziomu
 
-* `fail counter` - po przekroczeniu `3` gra się kończy
+* `fail counter` - po przekroczeniu trzech błędów gra się kończy
 
 * `check` - sprawdzenie poprawności wypełnionch pól
