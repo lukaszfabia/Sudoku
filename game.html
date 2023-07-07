@@ -12,7 +12,7 @@
     <h1 class="sudoku-title"><a class="link-title" href="sudoku.html">Sudoku</a></h1>
     <button class="header-button"><a class="link" href="game.html">Play</a></button>
     <button class="header-button"><a class="link" href="trickandtips.html">Tricks & tips</a></button>
-    <button class="header-button"><a class="link" href="aboutme.html">About me</a></button>
+    <button class="header-button"><a class="link" href="aboutme.html" target="_blank">About me</a></button>
 </header>
 <hr>
 <br>
@@ -26,9 +26,27 @@
             <option value="hard">hard</option>
         </select>
     </label>
-    <div class="timer-container" onchange="startTimer()"><span id="timer">00:00</span></div>
+    <div class="timer-container" onchange="startTimer()"><span>00:00</span></div>
     <br>
     <div id="board-container"></div>
+    <div>
+        <button class="buttons-style"><a class="link-new-game" href="game.html">New game</a></button>
+        <br>
+        <button class="buttons-style">Check</button>
+    </div>
+    <div class="input">
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>
+        <br>
+        <button>4</button>
+        <button>5</button>
+        <button>6</button>
+        <br>
+        <button>7</button>
+        <button>8</button>
+        <button>9</button>
+    </div>
 </section>
 <script src="generate_board.js"></script>
 </body>

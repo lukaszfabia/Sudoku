@@ -41,6 +41,7 @@
     border: 2px solid #000;
     overflow: hidden;
     white-space: nowrap; /* Zapobiega łamaniu planszy sudoku w pionie */
+    float: left;
 }
 
 .sudoku-board tr:not(:last-child):nth-child(3n) td {
@@ -74,4 +75,54 @@
     display: inline-block;
     margin-left: 245px;
     font-size: 18px;
+    padding-top: 20px;
 }
+
+.input {
+    display: inline-block;
+    float: right;
+    margin-right: 155px;
+    margin-top: 70px;
+    font-size: 20px;
+    transform: scale(1.7);
+}
+
+.input button {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    margin: 4px;
+    border: none;
+}
+
+.input button:hover {
+    background-color: #a9d2da;
+    transition: background-color 0.3s ease;
+}
+
+
+.buttons-style{
+    display: inline-block;
+    margin-left: 20px;
+    margin-top: 20px;
+    font-size: 20px;
+    width: 255px;
+    height: 50px;
+    border: none;
+    background-color: #42579b;
+    color: white;
+    border-radius: 10px;
+    font-family: "Roboto", sans-serif;
+}
+
+.buttons-style:hover{
+    background-color: #0c0d4b;
+    transition: background-color 0.3s ease;
+}
+
+.link-new-game{
+    text-decoration: none;
+    color: white;
+}
+
+
