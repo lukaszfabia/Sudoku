@@ -1,7 +1,6 @@
 .difficulty {
-    display: inline-block;
     position: relative;
-    cursor: pointer;
+    display: inline-block;
 }
 
 .diff-lvl {
@@ -10,23 +9,23 @@
     border: 1px solid #1a1a1a;
     padding: 5px;
     border-radius: 5px;
+    font-family: "Roboto", sans-serif;
 }
 
 .diff-lvl:hover {
-    border-color: #ff8c00;
+    border-color: #06232f;
 }
 
-.diff-lvl:focus {
-    outline: none;
-    border-color: #ff8c00;
-    box-shadow: 0 0 3px rgba(255, 140, 0, 0.5);
+.diff-lvl:disabled {
+    border-color: #004f79;
+    cursor: not-allowed;
 }
 
 .sudoku-board {
     display: inline-block;
     border-collapse: collapse;
     margin-top: 20px;
-    border: 2px solid #000;
+    border: 3px solid #000;
     overflow: hidden;
     white-space: nowrap;
     float: left;
@@ -107,6 +106,30 @@
     transition: background-color 0.3s ease;
 }
 
+.check-button-style {
+    display: inline-block;
+    margin-left: 20px;
+    margin-top: 20px;
+    font-size: 20px;
+    width: 255px;
+    height: 50px;
+    border: none;
+    background-color: #42579b;
+    color: white;
+    border-radius: 10px;
+    font-family: "Roboto", sans-serif;
+}
+
+.check-button-style:hover {
+    background-color: #0c0d4b;
+    transition: background-color 0.3s ease;
+}
+
+.check-button-style:disabled {
+    background-color: #868c8d;
+    color: #16162a;
+}
+
 .link-new-game {
     text-decoration: none;
     color: white;
@@ -136,9 +159,14 @@
     background-color: #f7f7f7;
 }
 
+.sudoku-cell.wrong-number {
+    background-color: #de7a7a;
+    transition: background-color 0.2s linear;
+}
+
 
 /* Media queries dla responsywności */
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 480px) {
     .timer-container {
         margin-left: 0;
     }

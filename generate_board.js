@@ -1,3 +1,10 @@
+const boardContainer = document.getElementById('board-container');
+let board;
+let timerInterval;
+let minutes = 0;
+let seconds = 0;
+let helpBoard;
+
 function generateBoard(arr) {
     // tworznie tablicy z liczbami od 1 do 9
     let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -44,14 +51,14 @@ function shuffleArray(array) {
 
 function checkBoard(board, row, col, number) {
     // Sprawdzenie wiersza
-    for (let i = 0; i < board.length; i++) {
+    for (let i = 0; i < 9; i++) {
         if (board[row][i] === number) {
             return false;
         }
     }
 
     // Sprawdzenie kolumny
-    for (let i = 0; i < board.length; i++) {
+    for (let i = 0; i < 9; i++) {
         if (board[i][col] === number) {
             return false;
         }
@@ -99,7 +106,7 @@ function renderBoard(board) {
             if (cellValue === 0) {
                 boardHtml += '<td class="sudoku-cell"></td>';
             } else {
-                boardHtml += `<td class="sudoku-cell" data-number="${cellValue}">${cellValue}</td>`;
+                boardHtml += `<td class="sudoku-cell">${cellValue}</td>`;
             }
         }
 
@@ -111,9 +118,6 @@ function renderBoard(board) {
     return boardHtml;
 }
 
-let timerInterval;
-let minutes = 0;
-let seconds = 0;
 
 function startTimer() {
     // Zerowanie minut i sekund
@@ -130,6 +134,15 @@ function stopTimer() {
 }
 
 function updateTimer() {
+    if (isProper()) {
+        stopTimer();
+        alert('Win!' + '\n' + 'Your time: ' + formatTime(minutes, seconds));
+
+        window.location.href = 'game.html';
+
+        return; // Zatrzymuje wykonywanie reszty kodu po przekierowaniu
+    }
+
     // Inkrementacja sekund
     seconds++;
 
@@ -138,7 +151,6 @@ function updateTimer() {
         seconds = 0;
         minutes++;
     }
-
     // Aktualizacja wyświetlanego czasu w elemencie z id "timer"
     document.getElementById("timer").innerHTML = formatTime(minutes, seconds);
 }
@@ -153,6 +165,12 @@ function formatTime(minutes, seconds) {
 
 function createMediumBoard() {
     let board = createBoard();
+    helpBoard = [];
+
+    for (let i = 0; i < board.length; i++) {
+        helpBoard[i] = board[i].slice(); // Głęboka kopia wiersza tablicy
+    }
+
     for (let i = 0; i < board.length; i++) {
         for (let j = 0; j < board[i].length; j++) {
             if (Math.random() < 0.6) {
@@ -160,11 +178,18 @@ function createMediumBoard() {
             }
         }
     }
+
     return board;
 }
 
+
 function createHardBoard() {
     let board = createBoard();
+    helpBoard = [];
+
+    for (let i = 0; i < board.length; i++) {
+        helpBoard[i] = board[i].slice(); // Głęboka kopia wiersza tablicy
+    }
     for (let i = 0; i < board.length; i++) {
         for (let j = 0; j < board[i].length; j++) {
             if (Math.random() < 0.7) {
@@ -177,6 +202,11 @@ function createHardBoard() {
 
 function createEasyBoard() {
     let board = createBoard();
+    helpBoard = [];
+
+    for (let i = 0; i < board.length; i++) {
+        helpBoard[i] = board[i].slice(); // Głęboka kopia wiersza tablicy
+    }
     for (let i = 0; i < board.length; i++) {
         for (let j = 0; j < board[i].length; j++) {
             if (Math.random() < 0.01) {
@@ -199,32 +229,23 @@ function createEmptyBoard() {
     return board;
 }
 
+
+/**
+ * Funkcja wywoływana po załadowaniu strony pokazuje pustą planszę
+ **/
 document.addEventListener('DOMContentLoaded', function () {
     const boardContainer = document.getElementById('board-container');
     boardContainer.innerHTML = renderBoard(createEmptyBoard());
 });
 
-function isFull(board) {
-    for (let i = 0; i < board.length; i++) {
-        for (let j = 0; j < board[i].length; i++) {
-            if (board[i][j] === 0 && checkBoard(board, i, j, board[i][j])) {
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
-let selectedCell = null;
-let selectedNumber = null;
-const boardContainer = document.getElementById('board-container');
-
 function sudokuBoard() {
+    let selectedCell = null;
+    let selectedNumber = null;
     const selectElement = document.querySelector('.diff-lvl');
     const selectedDifficulty = selectElement.value;
 
     // Logika generowania planszy na podstawie wybranej trudności
-    let board;
+
     if (selectedDifficulty === 'easy') {
         // Generowanie łatwej planszy
         board = createEasyBoard();
@@ -235,6 +256,17 @@ function sudokuBoard() {
         // Generowanie trudnej planszy
         board = createHardBoard();
     }
+
+    if (board) {
+        // Plansza została wygenerowana
+        startTimer();
+        updateTimer();
+        selectElement.disabled = true; // Zablokowanie comboboxa
+    } else {
+        // Plansza nie została wygenerowana
+        selectElement.disabled = false; // Odblokowanie comboboxa
+    }
+
 
     // Dodatkowa logika dla zaznaczania pola planszy
     boardContainer.addEventListener('click', (event) => {
@@ -249,48 +281,40 @@ function sudokuBoard() {
         }
     });
 
-    // Dodatkowa logika dla zaznaczania wybranej liczby z panelu
     const numbers = document.querySelectorAll('.input button');
     numbers.forEach((number) => {
         number.addEventListener('click', () => {
             if (selectedCell) {
-                selectedNumber = number.innerText;
+                const rowIndex = selectedCell.parentNode.rowIndex;
+                const cellIndex = selectedCell.cellIndex;
+                if (board[rowIndex][cellIndex] === 0) {
+                    selectedCell.innerText = number.innerText;
+                    board[rowIndex][cellIndex] = parseInt(number.innerText);
+                }
             }
         });
     });
 
-    // Logika dla wstawiania wybranej liczby na kliknięcie
-    boardContainer.addEventListener('click', () => {
+    boardContainer.innerHTML = renderBoard(board);
+
+    boardContainer.addEventListener('click', (event) => {
         if (selectedCell && selectedNumber) {
-            const rowIndex = selectedCell.parentNode.rowIndex;
-            const cellIndex = selectedCell.cellIndex;
+            const clickedCell = event.target;
+            const rowIndex = clickedCell.parentNode.rowIndex;
+            const cellIndex = clickedCell.cellIndex;
+
             if (board[rowIndex][cellIndex] === 0) {
-                selectedCell.innerText = selectedNumber;
+                clickedCell.innerText = selectedNumber;
                 board[rowIndex][cellIndex] = parseInt(selectedNumber);
             }
+
             selectedCell = null;
             selectedNumber = null;
         }
     });
-
     // Ustawienie planszy w kontenerze
-    boardContainer.innerHTML = renderBoard(board);
 
-    if (board) {
-        // Plansza została wygenerowana
-        startTimer();
-        updateTimer();
-        selectElement.disabled = true; // Zablokowanie comboboxa
-    } else if(isFull(board)) {
-        // Plansza została uzupełniona
-        stopTimer();
-        selectElement.disabled = false; // Odblokowanie comboboxa
-        alert("Win! Your time: " + formatTime(minutes, seconds) + "!");
-    }else {
-        // Plansza nie została wygenerowana
-        stopTimer();
-        selectElement.disabled = false; // Odblokowanie comboboxa
-    }
+
 }
 
 function highlightNumbers(board, clickedCell) {
@@ -303,6 +327,7 @@ function highlightNumbers(board, clickedCell) {
     cells.forEach((cell) => {
         cell.classList.remove('selected');
         cell.classList.remove('selected-number');
+        cell.classList.remove('wrong-number');
     });
 
     // Podświetl liczby w tym samym wierszu
@@ -333,12 +358,57 @@ function highlightNumbers(board, clickedCell) {
         }
     }
 
-    // Podświetl wszystkie liczby z planszy z wybranego pola
-    const cellsWithNumber = Array.from(boardContainer.querySelectorAll(`.sudoku-cell[data-number="${number}"]`));
+
+    // Podświetl wszystkie liczby z planszy o takiej samej wartości
+    const cellsWithNumber = Array.from(boardContainer.querySelectorAll('.sudoku-cell'));
     cellsWithNumber.forEach((cell) => {
-        cell.classList.add('selected-number');
+        if (parseInt(cell.innerText) === number) {
+            cell.classList.add('selected-number');
+        }
+    });
+}
+
+function isProper() {
+    let isProper = true;
+    const cells = Array.from(boardContainer.querySelectorAll('.sudoku-cell'));
+
+    cells.forEach((cell, index) => {
+        const rowIndex = Math.floor(index / 9);
+        const columnIndex = index % 9;
+        const number = parseInt(cell.innerText);
+        if (number !== board[rowIndex][columnIndex]) {
+            isProper = false;
+        }
     });
 
-
+    return isProper;
 }
+
+
+function check() {
+    const cells = Array.from(boardContainer.querySelectorAll('.sudoku-cell'));
+
+    cells.forEach((cell, index) => {
+        const rowIndex = Math.floor(index / 9);
+        const columnIndex = index % 9;
+        const number = parseInt(cell.innerText);
+        if (!isNaN(number) && number !== helpBoard[rowIndex][columnIndex]) {
+            cell.classList.add('wrong-number');
+        }
+
+    });
+
+    document.querySelector('.check-button-style').disabled = true;
+    console.log(isProper());
+    if (isProper()) {
+        stopTimer();
+        alert('Win!' + '\n' + 'Your time: ' + formatTime(minutes, seconds));
+        document.querySelector('.diff-lvl').disabled = false; // Odblokowanie comboboxa
+
+    }
+}
+
+
+
+
 
