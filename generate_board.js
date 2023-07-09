@@ -278,6 +278,7 @@ let selectedCell = null;
 
 function sudokuBoard() {
     let selectedNumber = null;
+    let clickedCell = null;
     const selectElement = document.querySelector('.diff-lvl');
     const selectedDifficulty = selectElement.value;
     const pauseButton = document.querySelector('.pause-button');
@@ -303,9 +304,10 @@ function sudokuBoard() {
     document.querySelector('.check-button-style').disabled = false;
     document.querySelector('.rubber').disabled = false;
 
+
     // Dodatkowa logika dla zaznaczania pola planszy
     boardContainer.addEventListener('click', (event) => {
-        const clickedCell = event.target;
+        clickedCell = event.target;
         if (clickedCell.classList.contains('sudoku-cell')) {
             if (selectedCell) {
                 selectedCell.classList.remove('selected');
@@ -325,6 +327,7 @@ function sudokuBoard() {
                 if (board[rowIndex][cellIndex] === 0) {
                     selectedCell.innerText = number.innerText;
                     board[rowIndex][cellIndex] = parseInt(number.innerText);
+                    highlightNumbers(board, clickedCell);
                 }
             }
         });
