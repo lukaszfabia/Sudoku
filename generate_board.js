@@ -243,7 +243,7 @@ function createEasyBoard() {
     }
     for (let i = 0; i < board.length; i++) {
         for (let j = 0; j < board[i].length; j++) {
-            if (Math.random() < 0.01) {
+            if (Math.random() < 0.5) {
                 board[i][j] = 0;
                 isGenerated[i][j] = false;
             }
