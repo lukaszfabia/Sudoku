@@ -4,6 +4,10 @@ let timerInterval;
 let minutes = 0;
 let seconds = 0;
 let helpBoard;
+let isPaused = false; // Zmienna przechowująca informację o zatrzymaniu timera
+let pausedMinutes = 0; // Zmienna przechowująca zatrzymane minuty
+let pausedSeconds = 0; // Zmienna przechowująca zatrzymane sekundy
+let isGenerated = []; // Zmienna przechowująca informację o wygenerowaniu planszy
 
 function generateBoard(arr) {
     // tworznie tablicy z liczbami od 1 do 9
@@ -82,6 +86,7 @@ function checkBoard(board, row, col, number) {
 function createBoard() {
     let board = Array.from({length: 9}, () => Array(9).fill(0));
     generateBoard(board);
+    prepareBoard();
 
     for (let i = 0; i < board.length; i++) {
         let row = '';
@@ -118,13 +123,24 @@ function renderBoard(board) {
     return boardHtml;
 }
 
-
 function startTimer() {
-    // Zerowanie minut i sekund
-    minutes = 0;
-    seconds = 0;
+    // Zerowanie minut i sekund, jeśli timer nie był zatrzymany
+    if (!isPaused) {
+        minutes = 0;
+        seconds = 0;
+    } else {
+        minutes = pausedMinutes;
+        seconds = pausedSeconds;
+    }
 
     // Aktualizowanie timera co sekundę
+    timerInterval = setInterval(updateTimer, 1000);
+}
+
+function resumeTimer() {
+    isPaused = false;
+    minutes = pausedMinutes;
+    seconds = pausedSeconds;
     timerInterval = setInterval(updateTimer, 1000);
 }
 
@@ -132,6 +148,7 @@ function stopTimer() {
     // Zatrzymanie aktualizacji timera
     clearInterval(timerInterval);
 }
+
 
 function updateTimer() {
     if (isProper()) {
@@ -151,8 +168,16 @@ function updateTimer() {
         seconds = 0;
         minutes++;
     }
+
     // Aktualizacja wyświetlanego czasu w elemencie z id "timer"
     document.getElementById("timer").innerHTML = formatTime(minutes, seconds);
+}
+
+function pauseTimer() {
+    isPaused = true;
+    pausedMinutes = minutes;
+    pausedSeconds = seconds;
+    stopTimer();
 }
 
 function formatTime(minutes, seconds) {
@@ -160,6 +185,13 @@ function formatTime(minutes, seconds) {
     let formattedMinutes = String(minutes).padStart(2, "0");
     let formattedSeconds = String(seconds).padStart(2, "0");
     return `${formattedMinutes}:${formattedSeconds}`;
+}
+
+function prepareBoard() {
+    for (let i = 0; i < 9; i++) {
+        isGenerated[i] = new Array(9).fill(true);
+    }
+
 }
 
 
@@ -171,10 +203,11 @@ function createMediumBoard() {
         helpBoard[i] = board[i].slice(); // Głęboka kopia wiersza tablicy
     }
 
-    for (let i = 0; i < board.length; i++) {
-        for (let j = 0; j < board[i].length; j++) {
+    for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
             if (Math.random() < 0.6) {
                 board[i][j] = 0;
+                isGenerated[i][j] = false;
             }
         }
     }
@@ -194,6 +227,7 @@ function createHardBoard() {
         for (let j = 0; j < board[i].length; j++) {
             if (Math.random() < 0.7) {
                 board[i][j] = 0;
+                isGenerated[i][j] = false;
             }
         }
     }
@@ -211,6 +245,7 @@ function createEasyBoard() {
         for (let j = 0; j < board[i].length; j++) {
             if (Math.random() < 0.01) {
                 board[i][j] = 0;
+                isGenerated[i][j] = false;
             }
         }
     }
@@ -238,17 +273,24 @@ document.addEventListener('DOMContentLoaded', function () {
     boardContainer.innerHTML = renderBoard(createEmptyBoard());
 });
 
+
+let selectedCell = null;
+
 function sudokuBoard() {
-    let selectedCell = null;
     let selectedNumber = null;
     const selectElement = document.querySelector('.diff-lvl');
     const selectedDifficulty = selectElement.value;
+    const pauseButton = document.querySelector('.pause-button');
+
+    pauseButton.disabled = selectElement.value === 'none';
+
 
     // Logika generowania planszy na podstawie wybranej trudności
 
     if (selectedDifficulty === 'easy') {
         // Generowanie łatwej planszy
         board = createEasyBoard();
+
     } else if (selectedDifficulty === 'medium') {
         // Generowanie średniej planszy
         board = createMediumBoard();
@@ -257,16 +299,9 @@ function sudokuBoard() {
         board = createHardBoard();
     }
 
-    if (board) {
-        // Plansza została wygenerowana
-        startTimer();
-        updateTimer();
-        selectElement.disabled = true; // Zablokowanie comboboxa
-    } else {
-        // Plansza nie została wygenerowana
-        selectElement.disabled = false; // Odblokowanie comboboxa
-    }
-
+    selectElement.disabled = !!board;
+    document.querySelector('.check-button-style').disabled = false;
+    document.querySelector('.rubber').disabled = false;
 
     // Dodatkowa logika dla zaznaczania pola planszy
     boardContainer.addEventListener('click', (event) => {
@@ -408,7 +443,37 @@ function check() {
     }
 }
 
+function togglePause() {
+    const pauseButton = document.querySelector(".pause-button");
+    const pauseLabel = document.querySelector(".pause-label");
+    const sudokuBoard = document.querySelector(".sudoku-board");
+
+    if (isPaused) {
+        sudokuBoard.classList.remove("blurred");
+        pauseButton.classList.remove("paused");
+        pauseLabel.textContent = "pause"; // Zmień tekst etykiety na "Pause"
+        // Wznów działanie gry - wykonaj odpowiednie operacje
+        // np. wznowienie animacji, odliczanie czasu itp.
+        resumeTimer();
+    } else {
+        pauseButton.classList.add("paused");
+        sudokuBoard.classList.add("blurred");
+        pauseLabel.textContent = "resume"; // Zmień tekst etykiety na "Resume"
+        // Zatrzymaj działanie gry - wykonaj odpowiednie operacje
+        // np. zatrzymanie animacji, zatrzymanie odliczania czasu itp.
+        pauseTimer();
+    }
+}
 
 
+function remove() {
+    if (!isGenerated[selectedCell.parentNode.rowIndex][selectedCell.cellIndex]) {
+        selectedCell.innerText = '0';
+        const rowIndex = selectedCell.parentNode.rowIndex;
+        const cellIndex = selectedCell.cellIndex;
+        board[rowIndex][cellIndex] = 0;
+    }
 
+    boardContainer.innerHTML = renderBoard(board);
 
+}

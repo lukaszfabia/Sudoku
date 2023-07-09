@@ -21,20 +21,27 @@
 <section>
     <h3>Choose difficulty level</h3>
     <label class="difficulty">
-        <select class="diff-lvl" onchange="sudokuBoard()">
+        <select class="diff-lvl" onchange="sudokuBoard()" onclick="startTimer()">
             <option value="none">select</option>
             <option value="easy">easy</option>
             <option value="medium">medium</option>
             <option value="hard">hard</option>
         </select>
     </label>
+    <div class="pause-container">
+        <button class="pause-button" onclick="togglePause()" disabled>
+            <span class="pause-icon"></span>
+            <span class="pause-label">pause</span>
+        </button>
+    </div>
     <div class="timer-container"><span id="timer">00:00</span></div>
     <br>
     <div id="board-container"></div>
     <div>
         <button class="buttons-style"><a class="link-new-game" href="game.html">New game</a></button>
         <br>
-        <button class="check-button-style" onclick="check()">Check</button>
+        <button class="check-button-style" onclick="check()" disabled>Check</button>
+        <button class="rubber" onclick="remove()" disabled>Remove</button>
     </div>
     <div class="input">
         <button>1</button>

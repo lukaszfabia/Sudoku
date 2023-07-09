@@ -4,6 +4,8 @@
 }
 
 .diff-lvl {
+    width: 110px;
+    height: 30px;
     font-size: 18px;
     transition: border-color 0.3s ease;
     border: 1px solid #1a1a1a;
@@ -29,6 +31,7 @@
     overflow: hidden;
     white-space: nowrap;
     float: left;
+    transition: filter 0.3s ease, pointer-events 0.3s ease;
 }
 
 .sudoku-board tr:not(:last-child):nth-child(3n) td {
@@ -60,15 +63,82 @@
 
 .timer-container {
     display: inline-block;
-    margin-left: 245px;
+    margin-left: 50px;
     font-size: 18px;
     padding-top: 20px;
 }
 
+
+#timer{
+    display: inline-block;
+    font-size: 18px;
+    padding: 10px 20px 5px;
+    color: #000000;
+    background-color: #FFFFFF;
+    border: none;
+    text-align: center;
+}
+
+.pause-container {
+    display: inline-block;
+    margin-left: 40px;
+    font-size: 18px;
+    padding-top: 10px;
+    position: relative;
+}
+
+.pause-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120px;
+    height: 40px;
+    margin-top: 10px;
+    border-radius: 25px;
+    background-color: #f2f2f2;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+.pause-button:hover {
+    background-color: #cecece;
+}
+
+.pause-button:hover:disabled {
+    background-color: #f2f2f2;
+    cursor: not-allowed;
+}
+
+.pause-icon {
+    width: 20px;
+    height: 20px;
+    background-size: cover;
+    margin-right: 10px;
+    background-image: url('https://img.icons8.com/ios-glyphs/30/pause--v1.png');
+}
+
+.pause-button.paused .pause-icon {
+    background-image: url('https://img.icons8.com/ios-glyphs/30/play--v1.png');
+}
+
+.pause-label {
+    font-size: 18px;
+    color: #333333;
+}
+
+.blurred {
+    filter: blur(6px); /* Efekt blurowania */
+    pointer-events: none; /* Wyłącz interakcję z elementem */
+}
+
+
 .input {
     display: inline-block;
     float: right;
-    margin-right: 155px;
+    margin-right: 150px;
     margin-top: 70px;
     font-size: 20px;
     transform: scale(1.7);
@@ -107,17 +177,18 @@
 }
 
 .check-button-style {
-    display: inline-block;
     margin-left: 20px;
     margin-top: 20px;
+    margin-right: 15px;
     font-size: 20px;
-    width: 255px;
+    width: 115px;
     height: 50px;
     border: none;
     background-color: #42579b;
     color: white;
     border-radius: 10px;
     font-family: "Roboto", sans-serif;
+    float: left;
 }
 
 .check-button-style:hover {
@@ -129,6 +200,36 @@
     background-color: #868c8d;
     color: #16162a;
 }
+
+.rubber{
+    margin-top: 20px;
+    font-size: 20px;
+    margin-left: 10px;
+    width: 115px;
+    height: 50px;
+    border: none;
+    background-color: #42579b;
+    color: white;
+    border-radius: 10px;
+    font-family: "Roboto", sans-serif;
+    float: left;
+}
+
+.rubber:hover {
+    background-color: #0c0d4b;
+    transition: background-color 0.3s ease;
+}
+
+.rubber:active{
+    background-color: #060733;
+    transition: background-color 0.3s ease;
+}
+
+.rubber:disabled{
+    background-color: #868c8d;
+    color: #16162a;
+}
+
 
 .link-new-game {
     text-decoration: none;
@@ -162,8 +263,13 @@
 .sudoku-cell.wrong-number {
     background-color: #de7a7a;
     transition: background-color 0.2s linear;
+    color: orangered;
 }
 
+.sudoku-cell.wrong-number:hover {
+    background-color: #d25757;
+    transition: background-color 0.2s linear;
+}
 
 /* Media queries dla responsywności */
 @media only screen and (max-width: 480px) {
