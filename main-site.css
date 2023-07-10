@@ -10,3 +10,69 @@
     font-size: 16px;
     line-break: auto;
 }
+
+.link-tutorial {
+    text-decoration: none;
+    color: #21213f;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.level {
+    color: #21213f;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.container {
+    display: flex;
+    align-items: flex-start;
+    width: 60%;
+    height: 40%;
+}
+
+.image-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 40%;
+    height: 100%;
+    float: right;
+}
+
+.image1 {
+    width: 270px;
+    height: 270px;
+    background-image: url(example1.png);
+    background-color: #FFFFFF;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: auto;
+    transition: background-image 0.5s ease;
+}
+
+.image1:hover {
+    background-image: url(example1a.png);
+}
+
+.image2 {
+    width: 270px;
+    height: 270px;
+    background-image: url(example1a.png);
+    background-color: #FFFFFF;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: auto;
+    transition: background-image 0.5s ease;
+}
+
+.image2:hover {
+    background-image: url(example1b.png);
+}
+
+.article-text {
+    text-align: left;
+}
+
+
+

@@ -8,7 +8,14 @@ let isPaused = false; // Zmienna przechowująca informację o zatrzymaniu timera
 let pausedMinutes = 0; // Zmienna przechowująca zatrzymane minuty
 let pausedSeconds = 0; // Zmienna przechowująca zatrzymane sekundy
 let isGenerated = []; // Zmienna przechowująca informację o wygenerowaniu planszy
+let selectedCell = null;
 
+
+/**
+ * Funkcja do generowania planszy
+ * @param arr
+ * @returns {boolean}
+ */
 function generateBoard(arr) {
     // tworznie tablicy z liczbami od 1 do 9
     let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -42,7 +49,11 @@ function generateBoard(arr) {
 }
 
 
-// Funkcja do tasowania (mieszania) elementów w tablicy
+/**
+ * Funkcja do tasowania planszy
+ * @param array
+ * @returns {*}
+ */
 function shuffleArray(array) {
     let newArray = array.slice(); // Tworzenie kopii tablicy
     for (let i = newArray.length - 1; i > 0; i--) {
@@ -52,7 +63,14 @@ function shuffleArray(array) {
     return newArray;
 }
 
-
+/**
+ * Funkcja do sprawdzajaca poprawnosc wstawionych liczby w trakcie genrowania planszy
+ * @param board
+ * @param row
+ * @param col
+ * @param number
+ * @returns {boolean}
+ */
 function checkBoard(board, row, col, number) {
     // Sprawdzenie wiersza
     for (let i = 0; i < 9; i++) {
@@ -83,6 +101,10 @@ function checkBoard(board, row, col, number) {
     return true;
 }
 
+/**
+ * Funkcja do stworzenia planszy
+ * @returns {any[][]}
+ */
 function createBoard() {
     let board = Array.from({length: 9}, () => Array(9).fill(0));
     generateBoard(board);
@@ -99,6 +121,11 @@ function createBoard() {
     return board;
 }
 
+/**
+ * Funkcja do przygotowania planszy w formie HTML
+ * @param board
+ * @returns {string}
+ */
 function renderBoard(board) {
     let boardHtml = '<table class="sudoku-board">';
 
@@ -123,6 +150,10 @@ function renderBoard(board) {
     return boardHtml;
 }
 
+/**
+ * Funkcja do startowania czasu
+ * @type {void}
+ */
 function startTimer() {
     // Zerowanie minut i sekund, jeśli timer nie był zatrzymany
     if (!isPaused) {
@@ -137,6 +168,10 @@ function startTimer() {
     timerInterval = setInterval(updateTimer, 1000);
 }
 
+/**
+ * Funkcja do wznowienia czasu
+ * @type {void}
+ */
 function resumeTimer() {
     isPaused = false;
     minutes = pausedMinutes;
@@ -144,12 +179,19 @@ function resumeTimer() {
     timerInterval = setInterval(updateTimer, 1000);
 }
 
+/**
+ * Funkcja do zatrzymania czasu
+ * @type {void}
+ */
 function stopTimer() {
     // Zatrzymanie aktualizacji timera
     clearInterval(timerInterval);
 }
 
-
+/**
+ * Funkcja do aktualizacji czasu
+ * @type {void}
+ */
 function updateTimer() {
     if (isProper()) {
         stopTimer();
@@ -173,6 +215,9 @@ function updateTimer() {
     document.getElementById("timer").innerHTML = formatTime(minutes, seconds);
 }
 
+/**
+ * Funkcja do zapauzowania czasu
+ */
 function pauseTimer() {
     isPaused = true;
     pausedMinutes = minutes;
@@ -180,6 +225,12 @@ function pauseTimer() {
     stopTimer();
 }
 
+/**
+ * Funkcja do formatowania czasu
+ * @param minutes
+ * @param seconds
+ * @returns {string}
+ */
 function formatTime(minutes, seconds) {
     // Formatowanie czasu w formacie mm:ss
     let formattedMinutes = String(minutes).padStart(2, "0");
@@ -187,6 +238,10 @@ function formatTime(minutes, seconds) {
     return `${formattedMinutes}:${formattedSeconds}`;
 }
 
+/**
+ * Funkcja tworzaca tablice booleanow do sprawdzania czy liczba zostala wygenerowana
+ * @type {void}
+ */
 function prepareBoard() {
     for (let i = 0; i < 9; i++) {
         isGenerated[i] = new Array(9).fill(true);
@@ -194,7 +249,10 @@ function prepareBoard() {
 
 }
 
-
+/**
+ * Zwraca tablice o srednim poziomie trudnosci
+ * @returns {*[][]}
+ */
 function createMediumBoard() {
     let board = createBoard();
     helpBoard = [];
@@ -215,7 +273,10 @@ function createMediumBoard() {
     return board;
 }
 
-
+/**
+ * Zwraca tablice o trudnym poziomie trudnosci
+ * @returns {*[][]}
+ */
 function createHardBoard() {
     let board = createBoard();
     helpBoard = [];
@@ -234,6 +295,10 @@ function createHardBoard() {
     return board;
 }
 
+/**
+ * Zwraca tablice o łatwym poziomie trudnosci
+ * @returns {*[][]}
+ */
 function createEasyBoard() {
     let board = createBoard();
     helpBoard = [];
@@ -252,6 +317,10 @@ function createEasyBoard() {
     return board;
 }
 
+/**
+ * Zwraca pusta tablice
+ * @returns {*[][]}
+ */
 function createEmptyBoard() {
     let board = createBoard();
     for (let i = 0; i < board.length; i++) {
@@ -266,16 +335,18 @@ function createEmptyBoard() {
 
 
 /**
- * Funkcja wywoływana po załadowaniu strony pokazuje pustą planszę
- **/
+ * Funkcja pokazujaca pusta tablice po zaladowaniu strony
+ * @type {void}
+ */
 document.addEventListener('DOMContentLoaded', function () {
     const boardContainer = document.getElementById('board-container');
     boardContainer.innerHTML = renderBoard(createEmptyBoard());
 });
 
-
-let selectedCell = null;
-
+/**
+ * Glowna funkcja do tworzenia planszy
+ * @type {void}
+ */
 function sudokuBoard() {
     let selectedNumber = null;
     let clickedCell = null;
@@ -355,6 +426,11 @@ function sudokuBoard() {
 
 }
 
+/**
+ * Funkcja do zaznaczania liczb w planszy
+ * @param board
+ * @param clickedCell
+ */
 function highlightNumbers(board, clickedCell) {
     const rowIndex = clickedCell.parentNode.rowIndex;
     const cellIndex = clickedCell.cellIndex;
@@ -406,6 +482,10 @@ function highlightNumbers(board, clickedCell) {
     });
 }
 
+/**
+ * Funkcja sprawdzajaca czy plansza jest poprawnie wypelniona
+ * @returns {boolean}
+ */
 function isProper() {
     let isProper = true;
     const cells = Array.from(boardContainer.querySelectorAll('.sudoku-cell'));
@@ -414,7 +494,7 @@ function isProper() {
         const rowIndex = Math.floor(index / 9);
         const columnIndex = index % 9;
         const number = parseInt(cell.innerText);
-        if (number !== board[rowIndex][columnIndex]) {
+        if (number !== helpBoard[rowIndex][columnIndex]) {
             isProper = false;
         }
     });
@@ -422,7 +502,10 @@ function isProper() {
     return isProper;
 }
 
-
+/**
+ * Funkcja sprawdzająca poprawność wprowadzonych liczb, dziala tylko wtedy gdy użytkownik wprowadził jakas liczbe, mozna uzyc jej raz
+ * @type {void}
+ */
 function check() {
     const cells = Array.from(boardContainer.querySelectorAll('.sudoku-cell'));
 
@@ -436,15 +519,32 @@ function check() {
 
     });
 
-    document.querySelector('.check-button-style').disabled = true;
-    console.log(isProper());
-    if (isProper()) {
-        stopTimer();
-        alert('Win!' + '\n' + 'Your time: ' + formatTime(minutes, seconds));
+    if (!checkInput()){
         document.querySelector('.diff-lvl').disabled = false; // Odblokowanie comboboxa
-
     }
+
 }
+
+
+/**
+ * Funkcja sprawdzająca czy użytkownik wprowadził jakieś liczby
+ * @returns {boolean}
+ */
+function checkInput(){
+    for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+            if (isGenerated[i][j]===false && board[i][j]!==0) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+/**
+ * Funkcje odpowiadajca za pauze gry
+ * @type {void}
+ */
 
 function togglePause() {
     const pauseButton = document.querySelector(".pause-button");
@@ -468,7 +568,10 @@ function togglePause() {
     }
 }
 
-
+/**
+ * Funkcja odpowiadająca za usuniecie inputu gracza
+ * @type {void}
+ */
 function remove() {
     if (!isGenerated[selectedCell.parentNode.rowIndex][selectedCell.cellIndex]) {
         selectedCell.innerText = '0';

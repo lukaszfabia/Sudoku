@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Sudoku</title>
     <link rel="stylesheet" href="header.css">
-    <link rel="stylesheet" href="game.css">
+    <link rel="stylesheet" href="main-site.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
@@ -14,8 +14,40 @@
     <h1 class="sudoku-title"><a class="link-title" href="sudoku.html">Sudoku</a></h1>
     <button class="header-button"><a class="link" href="game.html">Play</a></button>
     <button class="header-button"><a class="link" href="trickandtips.html">Tricks & tips</a></button>
-    <button class="header-button"><a class="link" href="aboutme.html">About me</a></button>
+    <button class="header-button"><a class="link" href="aboutme.html" target="_blank">About me</a></button>
 </header>
 <hr>
+
+<article>
+    <h3 class="head">Set of tricks and tips during sudoku.</h3>
+    <br>
+    <h1 class="level">Level: Amateur</h1>
+    <div class="image-container">
+        <div class="image1"></div>
+    </div>
+    <div class="container">
+        <div class="article-text">
+            <h3 class="article-text">Obvious empty fields with a last missing number.</h3>
+            Let's see this situation on the example on the right side:
+            <br><br>
+            In the first column, there is only one empty field, and we
+            know that the last missing number is 7. To see
+            difference, hover on the image. The same tactic we can use when we have last missing element in row or matrix 3x3.
+        </div>
+    </div>
+    <br><br><br><br><br><br><br><hr><br>
+    <div class="image-container">
+        <div class="image2"></div>
+    </div>
+    <div class="container">
+        <div class="article-text">
+            <h3 class="article-text">Last remaining field.</h3>
+            <p>To use this tactic we use highlight function implemented in app. It helps us to see which numbers are already used in row, column or matrix 3x3. Let's check this example on the right side:</p>
+            <br>
+            As we can see, in row 7 and 9 we have 7 so in the eighth matrix 3x3 we have to put 7. The same situation we can use to insert 7 in the third matrix 3x3, because in column 7 and 9 we have 7 so number which fit perfectly is also 7. However, if in 8 column, there wasn't only one field empty we don't have enough information to insert 7 in the third matrix 3x3. This technique is very effective on easy maps, but sometimes it works on harder boards.
+        </div>
+    </div>
+</article>
+<br>
 </body>
 </html>

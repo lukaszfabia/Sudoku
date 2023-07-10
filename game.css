@@ -157,7 +157,7 @@
     transition: background-color 0.3s ease;
 }
 
-.buttons-style {
+.new-game-button {
     display: inline-block;
     margin-left: 20px;
     margin-top: 20px;
@@ -171,7 +171,7 @@
     font-family: "Roboto", sans-serif;
 }
 
-.buttons-style:hover {
+.new-game-button:hover {
     background-color: #0c0d4b;
     transition: background-color 0.3s ease;
 }

@@ -1,6 +1,6 @@
-body {
+body{
     font-family: "Roboto", sans-serif;
-    width: 65%;
+    width: 50%;
     height: auto;
     margin: 0 auto;
 }
@@ -10,21 +10,20 @@ body {
     width: auto;
     height: auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
+    background-color: white;
 }
 
 .sudoku-title {
-    font-size: 24px;
     padding: 10px 20px 5px;
+    font-size: 25px;
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    background-color: white;
-    margin-left: 30px;
 }
 
-.sudoku-title:before {
+.sudoku-title:before{
     content: "";
     position: absolute;
     bottom: 0;
@@ -40,14 +39,17 @@ body {
 }
 
 .header-button {
+    background-color: white;
     font-size: 18px;
     padding: 10px 20px 5px;
+    border: none;
+    border-radius: 5px;
+    margin-left: auto;
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    background-color: white;
-    margin-left: 50px;
 }
+
 
 .header-button::before {
     content: "";
@@ -63,13 +65,13 @@ body {
 .header-button:hover::before {
     width: 100%;
 }
-
 .link {
     text-decoration: none;
     color: black;
 }
 
-.link-title {
+.link-title{
     text-decoration: none;
     color: #21213f;
+
 }
