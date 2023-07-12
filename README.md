@@ -26,6 +26,8 @@ Gracz wybiera poziom trudności, następnie generuje się plansza, po prawej str
 
 * `pause` - zatrzymuje czas i zamazuje plansze
 
+* `hint` - wypełnia jedno pole poprawną liczbą 
+
 **Zakończenie:**
 
 Gra kończy się po wypełnieniu wszystkich pól **poprawnie**, po zakończeniu wyświetla się alert z informacją o czasie ukończenia poziomu, po kliknięciu `ok`, skrypt przenosi do nowej gry, którą rozpoczynamy tak samo - poprzez wybranie poziomu trudności.
@@ -37,8 +39,8 @@ Gra kończy się po wypełnieniu wszystkich pól **poprawnie**, po zakończeniu 
   
 * Gra nie posiada możliwości wyboru poziomu trudności w trakcie gry.
   
-* Opcje `remove`, `check`, `pause` są dostępne tylko w trakcie gry.
+* Opcje `remove`, `check`, `pause`, `hint` są dostępne tylko w trakcie gry.
   
-* Opcja `check` jest dostępna tylko raz w trakcie gry.
+* Opcja `check` i `hint` jest dostępna tylko raz w trakcie gry.
   
 * Strona nie posiada jeszcze responsywności - co może powodować problemy z wyświetlaniem na przeglądarkach innych niż `Google Chrome` oraz na urządzeniach o innej rozdzielczości niż **1920x1080**, ale także przy dowolnej przeglądarce, która nie jest w **trybie pełnoekranowym**.
