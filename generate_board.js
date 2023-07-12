@@ -9,6 +9,7 @@ let pausedMinutes = 0; // Zmienna przechowująca zatrzymane minuty
 let pausedSeconds = 0; // Zmienna przechowująca zatrzymane sekundy
 let isGenerated = []; // Zmienna przechowująca informację o wygenerowaniu planszy
 let selectedCell = null;
+let clickedCell = null;
 
 
 /**
@@ -350,7 +351,6 @@ document.addEventListener('DOMContentLoaded', function () {
  */
 function sudokuBoard() {
     let selectedNumber = null;
-    let clickedCell = null;
     const selectElement = document.querySelector('.diff-lvl');
     const selectedDifficulty = selectElement.value;
     const pauseButton = document.querySelector('.pause-button');
@@ -375,6 +375,8 @@ function sudokuBoard() {
     selectElement.disabled = !!board;
     document.querySelector('.check-button-style').disabled = false;
     document.querySelector('.rubber').disabled = false;
+    document.querySelector('.get-help').disabled = false;
+    boardContainer.innerHTML = renderBoard(board);
 
 
     // Dodatkowa logika dla zaznaczania pola planszy
@@ -382,7 +384,6 @@ function sudokuBoard() {
         clickedCell = event.target;
         if (clickedCell.classList.contains('sudoku-cell')) {
             selectedCell = clickedCell;
-            highlightInsertedNumbers();
             highlightNumbers(board, clickedCell);
         }
     });
@@ -396,14 +397,11 @@ function sudokuBoard() {
                 if (board[rowIndex][cellIndex] === 0) {
                     selectedCell.innerText = number.innerText;
                     board[rowIndex][cellIndex] = parseInt(number.innerText);
-                    highlightInsertedNumbers();
                     highlightNumbers(board, clickedCell);
                 }
             }
         });
     });
-
-    boardContainer.innerHTML = renderBoard(board);
 
     boardContainer.addEventListener('click', (event) => {
         if (selectedCell && selectedNumber) {
@@ -414,14 +412,12 @@ function sudokuBoard() {
             if (board[rowIndex][cellIndex] === 0) {
                 clickedCell.innerText = selectedNumber;
                 board[rowIndex][cellIndex] = parseInt(selectedNumber);
-                highlightInsertedNumbers();
             }
 
             selectedCell = null;
             selectedNumber = null;
         }
     });
-    // Ustawienie planszy w kontenerze
 
 }
 
@@ -431,10 +427,13 @@ function sudokuBoard() {
  * @param clickedCell
  */
 function highlightNumbers(board, clickedCell) {
-    const innerBoard= document.getElementById('board-container');
+    const innerBoard = document.getElementById('board-container');
     const rowIndex = clickedCell.parentNode.rowIndex;
     const cellIndex = clickedCell.cellIndex;
     const number = parseInt(clickedCell.innerText);
+
+
+    highlightInsertedNumbers();
 
     // Usuń klasę .selected ze wszystkich komórek planszy
     const cells = Array.from(innerBoard.querySelectorAll('.sudoku-cell'));
@@ -513,7 +512,14 @@ function isProper() {
  * @type {void}
  */
 function check() {
+
+    // Usuń klasę .selected ze wszystkich komórek planszy
     const cells = Array.from(boardContainer.querySelectorAll('.sudoku-cell'));
+    cells.forEach((cell) => {
+        cell.classList.remove('selected');
+        cell.classList.remove('selected-number');
+    });
+
     cells.forEach((cell, index) => {
         const rowIndex = Math.floor(index / 9);
         const columnIndex = index % 9;
@@ -524,8 +530,8 @@ function check() {
 
     });
 
-    if (!checkInput()){
-        document.querySelector('.diff-lvl').disabled = false; // Odblokowanie comboboxa
+    if (!checkInput()) {
+        document.querySelector('.check-button-style').disabled = true;
     }
 
 }
@@ -535,10 +541,10 @@ function check() {
  * Funkcja sprawdzająca czy użytkownik wprowadził jakieś liczby
  * @returns {boolean}
  */
-function checkInput(){
+function checkInput() {
     for (let i = 0; i < 9; i++) {
         for (let j = 0; j < 9; j++) {
-            if (isGenerated[i][j]===false && board[i][j]!==0) {
+            if (isGenerated[i][j] === false && board[i][j] !== 0) {
                 return false;
             }
         }
@@ -585,5 +591,28 @@ function remove() {
         board[rowIndex][cellIndex] = 0;
     }
     boardContainer.innerHTML = renderBoard(board);
-    highlightInsertedNumbers();
+    highlightNumbers(board, clickedCell);
 }
+
+function getHelp() {
+    let clickedCell;
+    let counter = 0;
+    const cells = Array.from(boardContainer.querySelectorAll('.sudoku-cell'));
+    cells.forEach((cell, index) => {
+        const rowIndex = Math.floor(index / 9);
+        const columnIndex = index % 9;
+        const number = parseInt(cell.innerText);
+        if (isNaN(number) && counter === 0) {
+            clickedCell = cell;
+            cell.innerText = helpBoard[rowIndex][columnIndex];
+            board[rowIndex][columnIndex] = helpBoard[rowIndex][columnIndex];
+            isGenerated[rowIndex][columnIndex] = true;
+            boardContainer.querySelectorAll('.get-help').disabled = true;
+            counter++;
+        }
+    });
+
+    boardContainer.innerHTML = renderBoard(board);
+    highlightNumbers(board, clickedCell);
+}
+
