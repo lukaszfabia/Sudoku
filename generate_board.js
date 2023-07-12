@@ -137,6 +137,7 @@ function renderBoard(board) {
 
             if (cellValue === 0) {
                 boardHtml += '<td class="sudoku-cell"></td>';
+
             } else {
                 boardHtml += `<td class="sudoku-cell">${cellValue}</td>`;
             }
@@ -380,11 +381,8 @@ function sudokuBoard() {
     boardContainer.addEventListener('click', (event) => {
         clickedCell = event.target;
         if (clickedCell.classList.contains('sudoku-cell')) {
-            if (selectedCell) {
-                selectedCell.classList.remove('selected');
-            }
-            clickedCell.classList.add('selected');
             selectedCell = clickedCell;
+            highlightInsertedNumbers();
             highlightNumbers(board, clickedCell);
         }
     });
@@ -398,6 +396,7 @@ function sudokuBoard() {
                 if (board[rowIndex][cellIndex] === 0) {
                     selectedCell.innerText = number.innerText;
                     board[rowIndex][cellIndex] = parseInt(number.innerText);
+                    highlightInsertedNumbers();
                     highlightNumbers(board, clickedCell);
                 }
             }
@@ -415,6 +414,7 @@ function sudokuBoard() {
             if (board[rowIndex][cellIndex] === 0) {
                 clickedCell.innerText = selectedNumber;
                 board[rowIndex][cellIndex] = parseInt(selectedNumber);
+                highlightInsertedNumbers();
             }
 
             selectedCell = null;
@@ -422,7 +422,6 @@ function sudokuBoard() {
         }
     });
     // Ustawienie planszy w kontenerze
-
 
 }
 
@@ -432,12 +431,13 @@ function sudokuBoard() {
  * @param clickedCell
  */
 function highlightNumbers(board, clickedCell) {
+    const innerBoard= document.getElementById('board-container');
     const rowIndex = clickedCell.parentNode.rowIndex;
     const cellIndex = clickedCell.cellIndex;
     const number = parseInt(clickedCell.innerText);
 
     // Usuń klasę .selected ze wszystkich komórek planszy
-    const cells = Array.from(boardContainer.querySelectorAll('.sudoku-cell'));
+    const cells = Array.from(innerBoard.querySelectorAll('.sudoku-cell'));
     cells.forEach((cell) => {
         cell.classList.remove('selected');
         cell.classList.remove('selected-number');
@@ -453,11 +453,9 @@ function highlightNumbers(board, clickedCell) {
     });
 
     // Podświetl liczby w tej samej kolumnie
-    const column = Array.from(boardContainer.querySelectorAll(`.sudoku-board tr td:nth-child(${cellIndex + 1})`));
+    const column = Array.from(innerBoard.querySelectorAll(`.sudoku-board tr td:nth-child(${cellIndex + 1})`));
     column.forEach((cell) => {
-        if (cell.classList.contains('sudoku-cell')) {
-            cell.classList.add('selected');
-        }
+        cell.classList.add('selected');
     });
 
     // Podświetl liczby w tym samym kwadracie 3x3
@@ -465,19 +463,27 @@ function highlightNumbers(board, clickedCell) {
     const startCellIndex = Math.floor(cellIndex / 3) * 3;
     for (let i = startRowIndex; i < startRowIndex + 3; i++) {
         for (let j = startCellIndex; j < startCellIndex + 3; j++) {
-            const cell = boardContainer.querySelector(`.sudoku-board tr:nth-child(${i + 1}) td:nth-child(${j + 1})`);
-            if (cell.classList.contains('sudoku-cell')) {
-                cell.classList.add('selected');
-            }
+            const cell = innerBoard.querySelector(`.sudoku-board tr:nth-child(${i + 1}) td:nth-child(${j + 1})`);
+            cell.classList.add('selected');
         }
     }
 
-
     // Podświetl wszystkie liczby z planszy o takiej samej wartości
-    const cellsWithNumber = Array.from(boardContainer.querySelectorAll('.sudoku-cell'));
+    const cellsWithNumber = Array.from(innerBoard.querySelectorAll('.sudoku-cell'));
     cellsWithNumber.forEach((cell) => {
         if (parseInt(cell.innerText) === number) {
             cell.classList.add('selected-number');
+        }
+    });
+}
+
+function highlightInsertedNumbers() {
+    const cells = Array.from(boardContainer.querySelectorAll('.sudoku-cell'));
+    cells.forEach((cell, index) => {
+        const rowIndex = Math.floor(index / 9);
+        const columnIndex = index % 9;
+        if (!isGenerated[rowIndex][columnIndex]) {
+            cell.classList.add('not-generated');
         }
     });
 }
@@ -508,7 +514,6 @@ function isProper() {
  */
 function check() {
     const cells = Array.from(boardContainer.querySelectorAll('.sudoku-cell'));
-
     cells.forEach((cell, index) => {
         const rowIndex = Math.floor(index / 9);
         const columnIndex = index % 9;
@@ -579,7 +584,6 @@ function remove() {
         const cellIndex = selectedCell.cellIndex;
         board[rowIndex][cellIndex] = 0;
     }
-
     boardContainer.innerHTML = renderBoard(board);
-
+    highlightInsertedNumbers();
 }

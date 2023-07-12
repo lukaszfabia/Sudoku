@@ -256,18 +256,28 @@
     transition: background-color 0.2s linear;
 }
 
-.sudoku-cell.highlighted {
-    background-color: #f7f7f7;
-}
-
-.sudoku-cell.wrong-number {
+.sudoku-cell.not-generated.wrong-number {
     background-color: #de7a7a;
     transition: background-color 0.2s linear;
-    color: orangered;
 }
 
 .sudoku-cell.wrong-number:hover {
     background-color: #d25757;
+    transition: background-color 0.2s linear;
+}
+
+.sudoku-cell.not-generated {
+    background-color: #ffffff;
+    color: #0e5bab;
+}
+
+.sudoku-cell.not-generated.selected {
+    background-color: #d7e1ea;
+    transition: background-color 0.2s linear;
+}
+
+.sudoku-cell.not-generated.selected-number {
+    background-color: #a9d2da;
     transition: background-color 0.2s linear;
 }
 
