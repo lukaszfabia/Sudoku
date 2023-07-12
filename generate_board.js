@@ -116,7 +116,7 @@ function createBoard() {
         for (let j = 0; j < board[i].length; j++) {
             row += board[i][j] + ' ';
         }
-        console.log(row.trim());
+        row.trim();
     }
 
     return board;
@@ -565,16 +565,12 @@ function togglePause() {
     if (isPaused) {
         sudokuBoard.classList.remove("blurred");
         pauseButton.classList.remove("paused");
-        pauseLabel.textContent = "pause"; // Zmień tekst etykiety na "Pause"
-        // Wznów działanie gry - wykonaj odpowiednie operacje
-        // np. wznowienie animacji, odliczanie czasu itp.
+        pauseLabel.textContent = "pause";
         resumeTimer();
     } else {
         pauseButton.classList.add("paused");
         sudokuBoard.classList.add("blurred");
-        pauseLabel.textContent = "resume"; // Zmień tekst etykiety na "Resume"
-        // Zatrzymaj działanie gry - wykonaj odpowiednie operacje
-        // np. zatrzymanie animacji, zatrzymanie odliczania czasu itp.
+        pauseLabel.textContent = "resume";
         pauseTimer();
     }
 }
@@ -594,19 +590,23 @@ function remove() {
     highlightNumbers(board, clickedCell);
 }
 
+/**
+ * Funkcja odpowiadająca za podpowiedz wstawiajaca randomowa liczbe w puste pole
+ */
+
 function getHelp() {
     let clickedCell;
     let counter = 0;
     const cells = Array.from(boardContainer.querySelectorAll('.sudoku-cell'));
-    cells.forEach((cell, index) => {
-        const rowIndex = Math.floor(index / 9);
-        const columnIndex = index % 9;
+    cells.forEach((cell) => {
         const number = parseInt(cell.innerText);
         if (isNaN(number) && counter === 0) {
             clickedCell = cell;
-            cell.innerText = helpBoard[rowIndex][columnIndex];
-            board[rowIndex][columnIndex] = helpBoard[rowIndex][columnIndex];
-            isGenerated[rowIndex][columnIndex] = true;
+            const [randomRow, randomColumn] = getRandom();
+            cell.innerText = helpBoard[randomRow][randomColumn];
+            board[randomRow][randomColumn] = helpBoard[randomRow][randomColumn];
+            isGenerated[randomRow][randomColumn] = true;
+
             boardContainer.querySelectorAll('.get-help').disabled = true;
             counter++;
         }
@@ -616,3 +616,13 @@ function getHelp() {
     highlightNumbers(board, clickedCell);
 }
 
+
+function getRandom() {
+    let row, column;
+    do {
+        row = Math.floor(Math.random() * 9);
+        column = Math.floor(Math.random() * 9);
+    } while (board[row][column] !== 0);
+
+    return [row, column];
+}
