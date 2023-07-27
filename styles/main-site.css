@@ -43,7 +43,7 @@
 .image1 {
     width: 270px;
     height: 270px;
-    background-image: url(example1.png);
+    background-image: url(../images/example1.png);
     background-color: #FFFFFF;
     background-repeat: no-repeat;
     background-size: cover;
@@ -52,13 +52,13 @@
 }
 
 .image1:hover {
-    background-image: url(example1a.png);
+    background-image: url(../images/example1a.png);
 }
 
 .image2 {
     width: 270px;
     height: 270px;
-    background-image: url(example1a.png);
+    background-image: url(../images/example1a.png);
     background-color: #FFFFFF;
     background-repeat: no-repeat;
     background-size: cover;
@@ -67,7 +67,7 @@
 }
 
 .image2:hover {
-    background-image: url(example1b.png);
+    background-image: url(../images/example1b.png);
 }
 
 .article-text {

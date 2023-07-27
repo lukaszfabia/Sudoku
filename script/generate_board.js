@@ -594,6 +594,7 @@ function remove() {
  * Funkcja odpowiadająca za podpowiedz wstawiajaca randomowa liczbe w puste pole
  */
 
+
 function getHelp() {
     let clickedCell;
     let counter = 0;
@@ -606,14 +607,14 @@ function getHelp() {
             cell.innerText = helpBoard[randomRow][randomColumn];
             board[randomRow][randomColumn] = helpBoard[randomRow][randomColumn];
             isGenerated[randomRow][randomColumn] = true;
-
-            boardContainer.querySelectorAll('.get-help').disabled = true;
+            document.querySelector('.get-help').disabled = true;
             counter++;
         }
     });
 
     boardContainer.innerHTML = renderBoard(board);
     highlightNumbers(board, clickedCell);
+
 }
 
 
